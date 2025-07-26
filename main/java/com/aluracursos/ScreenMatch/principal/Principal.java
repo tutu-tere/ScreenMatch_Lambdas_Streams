@@ -85,17 +85,33 @@ public class Principal {
 
 //Busca episodio por pedazo de titulo
 
-        System.out.println("Por favor escriba el titulo del episodio que desea ver");
-        var pedazoTitulo = teclado.nextLine();
-        Optional<Episodio> episodioBuscado = episodios.stream()
-                .filter(e -> e.getTitulo().toUpperCase().contains(pedazoTitulo.toUpperCase()))
-                .findFirst();
-            if(episodioBuscado.isPresent()){
-            System.out.println("Episodio Encontrado");
-            System.out.println("Los datos son:"+ episodioBuscado.get());
-        } else {
-            System.out.println("Episodio no encontrado");
-        }
+//        System.out.println("Por favor escriba el titulo del episodio que desea ver");
+//        var pedazoTitulo = teclado.nextLine();
+//        Optional<Episodio> episodioBuscado = episodios.stream()
+//                .filter(e -> e.getTitulo().toUpperCase().contains(pedazoTitulo.toUpperCase()))
+//                .findFirst();
+//            if(episodioBuscado.isPresent()){
+//            System.out.println("Episodio Encontrado");
+//            System.out.println("Los datos son:"+ episodioBuscado.get());
+//        } else {
+//            System.out.println("Episodio no encontrado");
+//        }
+
+            //Evaluaciones por Temporadas
+        Map<Integer, Double> evaluacionesPorTemporada = episodios.stream()
+                .filter(episodio -> episodio.getEvaluacion()>0.0)
+                .collect(Collectors.groupingBy(Episodio::getTemporada,
+                                Collectors.averagingDouble(Episodio::getEvaluacion)));
+                    System.out.println(evaluacionesPorTemporada);
+
+                    DoubleSummaryStatistics est = episodios.stream()
+                            .filter(episodio -> episodio.getEvaluacion()>0.0)
+                            .collect(Collectors.summarizingDouble(Episodio::getEvaluacion));
+                        System.out.println("Media de las evaluaciones:"+ est.getAverage());
+                        System.out.println("Episodio Mejor evaluado:"+ est.getMax());
+                        System.out.println("Episodio Peor evaluado:"+ est.getMin());
+
+
     }
 
 }
